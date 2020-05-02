@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+        dbos:
+                image: mysql:5.7
+                volumes:
+                        - web_db:/var/lib/mysql
+                restart: always
+                environment:
+                        MYSQL_ROOT_PASSWORD: password
+                        MYSQL_USER: rohan
+                        MYSQL_PASSWORD: redhat
+                        MYSQL_DATABASE: mydb
+
+        joomos:
+                image: joomla
+                restart: always
+                depends_on:
+                        - dbos
+                ports:
+                        - 8080:80
+                environment:
+                        JOOMLA_DB_HOST: dbos
+                        JOOMLA_DB_USER: rohan
+                        JOOMLA_DB_PASSWORD: redhat
+                        JOOMLA_DB_NAME: mydb
+                volumes:
+                        - joom_vol:/var/www/html
+
+volumes:
+        web_db:
+        joom_vol:
